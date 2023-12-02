@@ -1,6 +1,6 @@
 import { log } from 'console';
 import fs from 'fs';
-import { readFile, readLines } from '../src/helpers';
+import { readFile, readLines } from './helpers';
 
 console.clear();
 log('\n#################### Running program ####################');
