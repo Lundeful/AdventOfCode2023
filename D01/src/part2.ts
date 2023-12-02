@@ -1,14 +1,15 @@
 import { log } from 'console';
 import fs, { PathOrFileDescriptor } from 'fs';
+import { readFile, readLines } from './helpers';
 
 console.clear();
 log('\n#################### Running program ####################');
 const part = 'Part2';
 
-const run = (path: PathOrFileDescriptor): string => {
+const run = (path: string): string => {
   // Start
   log('## Starting run ##');
-  let input = fs.readFileSync(path).toString();
+  let input = readFile(path);
 
   // Logic
   const digits = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
@@ -45,7 +46,7 @@ if (!!testResult && testResult == expectedResult) {
   log(`[${results}] Final result`);
 
   // Compare results
-  var previousResults = fs.readFileSync(outputPath).toString().split('\n');
+  var previousResults = readLines(outputPath);
   if (previousResults.some((oldResult) => oldResult == results)) {
     log('Result already recorded');
   } else {
