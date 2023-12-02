@@ -14,9 +14,19 @@ export const runSolver = async (day: number, part: number): Promise<string> => {
             throw new Error('Solver module does not export a solve function');
         }
 
-        // Solve for test-input
+        // Get test input
         const testInput = await getTestInput(dayStr, partStr);
+        if (!testInput) {
+            throw new Error('Missing test input');
+        }
+
+        // Get test solution
         const testSolution = await getTestSolution(dayStr, partStr);
+        if (!testSolution) {
+            throw new Error('Missing test solution');
+        }
+
+        // Solve for test input
         const testResult = solve(testInput);
 
         // Verify test results
@@ -29,20 +39,24 @@ export const runSolver = async (day: number, part: number): Promise<string> => {
                 `Received: '${colors.yellow}${testResult}${colors.default}'`
             );
         } else {
-            console.log(colors.green + 'Test passed. Running real input\n' + colors.default);
+            console.log(colors.green + 'Test passed. Running puzzle input\n' + colors.default);
         }
 
-        // Solve for real input
+        // Get puzzle input
         const input = await getInput(dayStr);
+        if (!input) {
+            throw new Error('Missing real input');
+        }
+
+        // Solve for puzzle input
         const result = solve(input).trim();
 
         // Store and return result
         await upsertResult(dayStr, partStr, result);
         return `Result: '${colors.yellow}${result}${colors.default}'`;
     } catch (error) {
-        const message = `Error loading solver for Day ${day}, Part ${part}:`;
-        console.error(colors.red + message, error);
-        return message;
+        console.error(colors.red + error + colors.default);
+        return '';
     }
 };
 
@@ -50,22 +64,22 @@ interface ISolver {
     solve: (input: string) => string;
 }
 
-const getInput = (dayStr: string) => {
+const getInput = (dayStr: string): Promise<string> => {
     const filePath = path.join(__dirname, 'days', dayStr, 'input.txt');
     return fs.promises.readFile(filePath, 'utf-8');
 };
 
-const getTestInput = (dayStr: string, partStr: string) => {
+const getTestInput = (dayStr: string, partStr: string): Promise<string> => {
     const filePath = path.join(__dirname, 'days', dayStr, `${partStr}-TestInput.txt`);
     return fs.promises.readFile(filePath, 'utf-8');
 };
 
-const getTestSolution = (dayStr: string, partStr: string) => {
+const getTestSolution = (dayStr: string, partStr: string): Promise<string> => {
     const filePath = path.join(__dirname, 'days', dayStr, `${partStr}-TestSolution.txt`);
     return fs.promises.readFile(filePath, 'utf-8');
 };
 
-const upsertResult = async (dayStr: string, partStr: string, result: string) => {
+const upsertResult = async (dayStr: string, partStr: string, result: string): Promise<void> => {
     if (!result) return;
 
     const filePath = path.join(__dirname, 'days', dayStr, `${partStr}-Output.txt`);
