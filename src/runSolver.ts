@@ -1,6 +1,6 @@
-import fs from 'fs';
-import path from 'path';
+import { promises } from 'fs';
 import { colors } from './colors';
+import path from 'path';
 
 export const runSolver = async (day: number, part: number): Promise<string> => {
     const dayStr = `D${day.toString().padStart(2, '0')}`;
@@ -8,7 +8,7 @@ export const runSolver = async (day: number, part: number): Promise<string> => {
 
     try {
         // Get solver
-        const solverPath = `./days/${dayStr}/${partStr}`;
+        const solverPath = path.join(__dirname, 'days', dayStr, partStr + '.ts');
         const { solve }: ISolver = await import(solverPath);
         if (!solve) {
             throw new Error('Solver module does not export a solve function');
@@ -66,29 +66,29 @@ interface ISolver {
 
 const getInput = (dayStr: string): Promise<string> => {
     const filePath = path.join(__dirname, 'days', dayStr, 'input.txt');
-    return fs.promises.readFile(filePath, 'utf-8');
+    return promises.readFile(filePath, 'utf-8');
 };
 
 const getTestInput = (dayStr: string, partStr: string): Promise<string> => {
     const filePath = path.join(__dirname, 'days', dayStr, `${partStr}-TestInput.txt`);
-    return fs.promises.readFile(filePath, 'utf-8');
+    return promises.readFile(filePath, 'utf-8');
 };
 
 const getTestSolution = (dayStr: string, partStr: string): Promise<string> => {
     const filePath = path.join(__dirname, 'days', dayStr, `${partStr}-TestSolution.txt`);
-    return fs.promises.readFile(filePath, 'utf-8');
+    return promises.readFile(filePath, 'utf-8');
 };
 
 const upsertResult = async (dayStr: string, partStr: string, result: string): Promise<void> => {
     if (!result) return;
 
     const filePath = path.join(__dirname, 'days', dayStr, `${partStr}-Output.txt`);
-    var previousResults = await fs.promises.readFile(filePath, 'utf-8');
+    var previousResults = await promises.readFile(filePath, 'utf-8');
 
     if (previousResults.split('\n').some((oldResult) => oldResult == result)) {
         console.log('Result already recorded');
     } else {
         console.log('New result, storing to file');
-        await fs.promises.appendFile(filePath, result + '\n');
+        await promises.appendFile(filePath, result + '\n');
     }
 };

@@ -1,6 +1,6 @@
-import fs from 'fs';
 import path from 'path';
 import { colors } from './colors';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 
 export const VerifySetup = () => {
     console.log('Verifying setup');
@@ -40,24 +40,24 @@ export const VerifySetup = () => {
 };
 
 const upsertFolder = (path: string) => {
-    if (!fs.existsSync(path)) {
-        fs.mkdirSync(path);
+    if (!existsSync(path)) {
+        mkdirSync(path);
     }
 };
 
 const upsertFile = (path: string) => {
-    if (!fs.existsSync(path)) {
-        fs.writeFileSync(path, '');
+    if (!existsSync(path)) {
+        writeFileSync(path, '');
     }
 };
 
 const upsertSolver = (path: string) => {
-    if (!fs.existsSync(path)) {
-        fs.writeFileSync(path, solverTemplate);
+    if (!existsSync(path)) {
+        writeFileSync(path, solverTemplate);
     } else {
-        const existingContent = fs.readFileSync(path).toString();
+        const existingContent = readFileSync(path).toString();
         if (!existingContent.includes(solverSignature)) {
-            fs.writeFileSync(path, solverTemplate + '/* ' + existingContent + '*/');
+            writeFileSync(path, solverTemplate + '/* ' + existingContent + '*/');
         }
     }
 };
