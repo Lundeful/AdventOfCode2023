@@ -1,6 +1,3 @@
-import { log } from 'console';
-import { Utils } from '../../utils';
-
 interface Card {
     id: number;
     winningNumbers: string[];
@@ -43,10 +40,12 @@ export const solve = (input: string): string => {
 
 const getMatchesForCard = (card: Card) => {
     let numberOfMatches = 0;
+
     card.myNumbers.forEach((number) => {
         if (card.winningNumbers.some((wn) => wn == number)) {
             numberOfMatches++;
         }
     });
+
     return numberOfMatches;
 };
