@@ -7,10 +7,8 @@ export const solve = (input: string): string => {
 
     let totalRatio = 0;
     for (let i = 0; i < grid.length; i++) {
-        const row = grid[i];
-        for (let j = 0; j < row.length; j++) {
-            let element = row[j];
-            if (element == '*') {
+        for (let j = 0; j < grid[i].length; j++) {
+            if (grid[i][j] == '*') {
                 const numberCoords = getNumberCoordinatesForGear(grid, i, j);
                 if (numberCoords.length == 2) {
                     const numbers = numberCoords.map((n) => getNumberForCoordinate(grid, n.y, n.x));
@@ -42,7 +40,7 @@ const getNumberCoordinatesForGear = (grid: string[][], i: number, j: number) => 
     // Check top
     if (topLeft && topMiddle && topRight) {
         // One large number on top
-        coordinates.push({ y: i - 1, x: j - 1 });
+        coordinates.push({ y: i - 1, x: j });
     } else if (topLeft && !topMiddle && topRight) {
         // Numbers top left and top right
         coordinates.push({ y: i - 1, x: j - 1 });
@@ -74,7 +72,7 @@ const getNumberCoordinatesForGear = (grid: string[][], i: number, j: number) => 
     // Check bottom
     if (bottomLeft && bottomMiddle && bottomRight) {
         // One long number bottom
-        coordinates.push({ y: i + 1, x: j - 1 });
+        coordinates.push({ y: i + 1, x: j });
     } else if (bottomLeft && !bottomMiddle && bottomRight) {
         // Numbers left and right bottom
         coordinates.push({ y: i + 1, x: j - 1 });
@@ -98,24 +96,21 @@ const getNumberCoordinatesForGear = (grid: string[][], i: number, j: number) => 
 
 const getNumberForCoordinate = (grid: string[][], i: number, j: number) => {
     let number = grid[i][j];
-
     if (!isNumber(number)) throw new Error('This function is only for NUMBERS');
 
     // Check left
-    let index = j - 1;
-    while (isNumber(getGridValue(grid, i, index))) {
-        number = getGridValue(grid, i, index) + number;
-        index--;
+    let currentIndex = j - 1;
+    while (isNumber(getGridValue(grid, i, currentIndex))) {
+        number = getGridValue(grid, i, currentIndex) + number;
+        currentIndex--;
     }
 
     // Check right
-    index = j + 1;
-    while (isNumber(getGridValue(grid, i, index))) {
-        number = number + getGridValue(grid, i, index);
-        index++;
+    currentIndex = j + 1;
+    while (isNumber(getGridValue(grid, i, currentIndex))) {
+        number = number + getGridValue(grid, i, currentIndex);
+        currentIndex++;
     }
-
-    log(number);
 
     return parseInt(number);
 };
