@@ -1,3 +1,5 @@
+import { Utils } from '../../utils';
+
 export const solve = (input: string): string => {
     const lines = input.split('\n');
 
@@ -8,7 +10,7 @@ export const solve = (input: string): string => {
         return parsed;
     });
 
-    var result = numbers.reduce((a, b) => a + b).toString();
+    var result = numbers.reduce(Utils.Reducers.add).toString();
 
     return result;
 };

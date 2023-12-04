@@ -2,7 +2,7 @@ import { Utils } from '../../utils';
 
 export const solve = (input: string): string => {
     const lines = input.split('\n');
-    const results = lines.map(getResultForGame).reduce((a, b) => a + b);
+    const results = lines.map(getResultForGame).reduce(Utils.Reducers.add);
 
     return results.toString();
 };
