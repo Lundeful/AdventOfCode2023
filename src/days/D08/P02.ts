@@ -58,26 +58,10 @@ export const solve = (input: string): string => {
         return numberOfSteps;
     });
 
-    let lowstAmountOfSteps = -1;
+    let leastAmountOfSteps = -1;
     steps.forEach((step) => {
-        lowstAmountOfSteps = getleastCommonMultiple(lowstAmountOfSteps, step);
+        leastAmountOfSteps = Utils.Math.getleastCommonMultiple(leastAmountOfSteps, step);
     });
 
-    return '' + lowstAmountOfSteps;
-};
-
-const getGreatestCommonDivisor = (a: number, b: number): number => {
-    while (b !== 0) {
-        let temp = b;
-        b = a % b;
-        a = temp;
-    }
-
-    return a;
-};
-
-const getleastCommonMultiple = (a: number, b: number): number => {
-    const greatestCommonDivisor = getGreatestCommonDivisor(a, b);
-    const lowestCommonMultiple = (a * b) / greatestCommonDivisor;
-    return lowestCommonMultiple;
+    return '' + leastAmountOfSteps;
 };
