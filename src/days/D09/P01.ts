@@ -39,13 +39,11 @@ const fillGrid = (numbers: number[]): number[][] => {
         const newArr = Array(grid[index].length - 1).fill(0);
 
         for (let j = 0; j < newArr.length; j++) {
-            const element = newArr[j];
             const nextValue = previousArr[j + 1] - previousArr[j];
             newArr[j] = nextValue;
         }
 
         grid.push(newArr);
-
         index++;
     }
 
